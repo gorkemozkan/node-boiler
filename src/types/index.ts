@@ -1,4 +1,5 @@
 import { Request } from 'express';
+import { UserRole } from '@prisma/client';
 
 export interface ApiResponse<T = unknown> {
   success: boolean;
@@ -20,7 +21,7 @@ export interface AuthenticatedRequest extends Request {
   user?: {
     id: string;
     email: string;
-    role: string;
+    role: UserRole;
   };
 }
 

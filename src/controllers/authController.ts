@@ -6,13 +6,14 @@ import { env } from '../config/env';
 import { successResponse, errorResponse, paginatedResponse } from '../utils/response';
 import { validateRequest } from '../utils/validation';
 import { AuthenticatedRequest } from '../types';
+import { UserRole } from '@prisma/client';
 
 const registerSchema = z.object({
   body: z.object({
     email: z.string().email('Invalid email format'),
     password: z.string().min(6, 'Password must be at least 6 characters'),
     name: z.string().min(2, 'Name must be at least 2 characters'),
-    role: z.string().optional(),
+    role: z.nativeEnum(UserRole).optional(),
   }),
 });
 
@@ -27,14 +28,14 @@ const updateUserSchema = z.object({
   body: z.object({
     email: z.string().email('Invalid email format').optional(),
     name: z.string().min(2, 'Name must be at least 2 characters').optional(),
-    role: z.string().optional(),
+    role: z.nativeEnum(UserRole).optional(),
   }),
   params: z.object({
     id: z.string().uuid('Invalid user ID'),
   }),
 });
 
-function createJwtToken(user: { id: string; email: string; role: string }): string {
+function createJwtToken(user: { id: string; email: string; role: UserRole }): string {
   return jwt.sign(
     { id: user.id, email: user.email, role: user.role },
     env.JWT_SECRET,
@@ -42,7 +43,7 @@ function createJwtToken(user: { id: string; email: string; role: string }): stri
   );
 }
 
-function formatUserResponse(user: any) {
+function formatUserResponse(user: { id: string; email: string; name: string; role: UserRole; createdAt: Date; updatedAt: Date }) {
   return {
     id: user.id,
     email: user.email,

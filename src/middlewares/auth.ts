@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { env } from '../config/env';
 import { AuthenticatedRequest } from '../types';
 import { errorResponse } from '../utils/response';
+import { UserRole } from '@prisma/client';
 
 export function authenticateToken(
   req: AuthenticatedRequest,
@@ -21,7 +22,7 @@ export function authenticateToken(
     const decoded = jwt.verify(token, env.JWT_SECRET) as {
       id: string;
       email: string;
-      role: string;
+      role: UserRole;
     };
     
     req.user = decoded;
@@ -32,7 +33,7 @@ export function authenticateToken(
   }
 }
 
-export function requireRole(roles: string[]) {
+export function requireRole(roles: UserRole[]) {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
     if (!req.user) {
       errorResponse(res, 'Authentication required', 401);

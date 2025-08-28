@@ -1,12 +1,13 @@
 import { prisma } from '../config/database';
 import bcrypt from 'bcryptjs';
+import { UserRole } from '@prisma/client';
 
 export interface User {
   id: string;
   email: string;
   password: string;
   name: string;
-  role: string;
+  role: UserRole;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -15,13 +16,13 @@ export interface CreateUserData {
   email: string;
   password: string;
   name: string;
-  role?: string | undefined;
+  role?: UserRole | undefined;
 }
 
 export interface UpdateUserData {
   email?: string;
   name?: string;
-  role?: string;
+  role?: UserRole;
 }
 
 export class UserModel {
@@ -32,7 +33,7 @@ export class UserModel {
       data: {
         ...data,
         password: hashedPassword,
-        role: data.role || 'user',
+        role: data.role || UserRole.USER,
       },
     });
   }

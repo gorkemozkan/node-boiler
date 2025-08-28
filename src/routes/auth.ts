@@ -1,17 +1,24 @@
 import { Router } from 'express';
-import { AuthController } from '../controllers/authController';
+import { 
+  register, 
+  login, 
+  getProfile, 
+  updateProfile, 
+  getAllUsers, 
+  getUserById 
+} from '../controllers/authController';
 import { authenticateToken, requireRole } from '../middlewares/auth';
 import { validatePagination } from '../utils/validation';
 
 const router = Router();
 
-router.post('/register', AuthController.register);
-router.post('/login', AuthController.login);
+router.post('/register', register);
+router.post('/login', login);
 
-router.get('/profile', authenticateToken, AuthController.getProfile);
-router.put('/profile', authenticateToken, AuthController.updateProfile);
+router.get('/profile', authenticateToken, getProfile);
+router.put('/profile', authenticateToken, updateProfile);
 
-router.get('/users', authenticateToken, requireRole(['admin']), validatePagination, AuthController.getAllUsers);
-router.get('/users/:id', authenticateToken, requireRole(['admin']), AuthController.getUserById);
+router.get('/users', authenticateToken, requireRole(['admin']), validatePagination, getAllUsers);
+router.get('/users/:id', authenticateToken, requireRole(['admin']), getUserById);
 
 export default router;

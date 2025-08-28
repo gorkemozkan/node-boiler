@@ -159,12 +159,74 @@ npm run test:watch
 
 ## Environment Variables
 
+### Required Variables
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `DATABASE_URL` | PostgreSQL connection string | `postgresql://user:pass@localhost:5432/db` |
+| `JWT_SECRET` | JWT signing secret (min 32 chars) | `your-super-secret-key-with-32-chars` |
+
+### Core Configuration
+
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `NODE_ENV` | Environment mode | `development` |
-| `PORT` | Server port | `3000` |
-| `DATABASE_URL` | PostgreSQL connection string | Required |
-| `JWT_SECRET` | JWT signing secret | Required |
+| `PORT` | Server port (1-65535) | `3000` |
+| `API_PREFIX` | API route prefix | `/api/v1` |
+| `LOG_LEVEL` | Logging level | `info` |
+
+### JWT Configuration
+
+| Variable | Description | Default |
+|----------|-------------|---------|
 | `JWT_EXPIRES_IN` | JWT token expiration | `7d` |
-| `RATE_LIMIT_WINDOW_MS` | Rate limit window | `900000` |
+| `JWT_REFRESH_SECRET` | Refresh token secret | Optional |
+| `JWT_REFRESH_EXPIRES_IN` | Refresh token expiration | `30d` |
+
+### Security & Rate Limiting
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `RATE_LIMIT_WINDOW_MS` | Rate limit window (ms) | `900000` (15min) |
 | `RATE_LIMIT_MAX_REQUESTS` | Max requests per window | `100` |
+| `CORS_ORIGIN` | CORS allowed origins | `*` |
+| `CORS_CREDENTIALS` | Allow CORS credentials | `true` |
+
+### Optional Services
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `REDIS_URL` | Redis connection for caching | `redis://localhost:6379` |
+| `SENTRY_DSN` | Sentry error tracking | `https://dsn@sentry.io/project` |
+| `SMTP_HOST` | SMTP server for emails | `smtp.gmail.com` |
+| `SMTP_PORT` | SMTP port | `587` |
+| `SMTP_USER` | SMTP username | `user@gmail.com` |
+| `SMTP_PASS` | SMTP password | `app-password` |
+
+### File Upload
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `MAX_FILE_SIZE` | Max file size in bytes | `5242880` (5MB) |
+| `UPLOAD_PATH` | Upload directory | `./uploads` |
+
+### Environment File Setup
+
+Create a `.env` file in the root directory:
+
+```bash
+# Copy example file
+cp .env.example .env
+
+# Or create manually with required variables:
+NODE_ENV=development
+PORT=3000
+DATABASE_URL="postgresql://username:password@localhost:5432/node_boiler"
+JWT_SECRET="your-super-secret-jwt-key-with-at-least-32-characters"
+```
+
+**Security Notes:**
+- Use strong, unique secrets in production
+- Never commit `.env` files to version control
+- Use different secrets for different environments
+- Consider using a secrets management service in production

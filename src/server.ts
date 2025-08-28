@@ -1,10 +1,16 @@
 import app from './app';
-import { env } from './config/env';
+import Config from './utils/config';
 import { prisma } from './config/database';
 
-const server = app.listen(env.PORT, () => {
-  console.log(`Server running on port ${env.PORT} in ${env.NODE_ENV} mode`);
-  console.log(`Health check: http://localhost:${env.PORT}/api/health`);
+Config.validateProductionConfig();
+
+const server = app.listen(Config.server.port, () => {
+  console.log(`Server running on port ${Config.server.port} in ${Config.server.nodeEnv} mode`);
+  console.log(`Health check: http://localhost:${Config.server.port}${Config.server.apiPrefix}/health`);
+  
+  if (Config.isDevelopment) {
+    console.log(`Configuration summary:`, Config.getSummary());
+  }
 });
 
 const gracefulShutdown = async (signal: string) => {

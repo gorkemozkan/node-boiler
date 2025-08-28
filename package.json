@@ -2,11 +2,11 @@
   "name": "node-boiler",
   "version": "1.0.0",
   "description": "Node.js TypeScript boilerplate with PostgreSQL",
-  "main": "public/server.js",
+  "main": "dist/server.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
-    "start": "node public/server.js",
+    "start": "node dist/server.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "lint": "eslint src/**/*.ts",
